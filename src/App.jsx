@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import './App.css'
-
+// add score
 function App() {
-  //const [score, setScore] = useState(0);
+  const [history, setHistory] = useState([]);
+  const [score, setScore] = useState(0);
   const [cards, setCards] = useState([]);
 
   const initCards = (data) => {
@@ -13,6 +14,24 @@ function App() {
       id: uuid(),
     }));
     setCards(newCards);
+  }
+
+  const historyRepeats = (id) => {
+    for(let i=0; i<history.length; ++i)
+      if(history[i] === id) return true;
+    return false;
+  }
+
+  const processCards = (id) => {
+    if(historyRepeats(id)) {
+      setScore(0);
+      setHistory([]);
+    }
+    else {
+      history.push(id)
+      setScore(score + 1);
+    }
+    shuffleCards();
   }
 
   const shuffleCards = () => {
@@ -37,17 +56,20 @@ function App() {
   }, []);
 
   return (
-    <div className='cards'>
-      {cards.map(card =>
-        <img
-          className='card'
-          src={card.url} 
-          key={card.id} 
-          width='256px' 
-          height='256px'
-          onClick={shuffleCards}
-        />)
-      }
+    <div id='app'>
+      <h2>Score: {score}</h2>
+      <div className='cards'>
+        {cards.map(card =>
+          <img
+            className='card'
+            src={card.url} 
+            key={card.id} 
+            width='256px' 
+            height='256px'
+            onClick={() => processCards(card.id)}
+          />)
+        }
+      </div>
     </div>
   );
 }
