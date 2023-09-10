@@ -5,6 +5,7 @@ import './App.css'
 function App() {
   const [history, setHistory] = useState([]);
   const [score, setScore] = useState(0);
+  const [maxScore, setMaxScore] = useState(0);
   const [cards, setCards] = useState([]);
 
   const initCards = (data) => {
@@ -30,6 +31,7 @@ function App() {
     else {
       history.push(id)
       setScore(score + 1);
+      setMaxScore(Math.max(maxScore, score + 1));
     }
     shuffleCards();
   }
@@ -46,7 +48,7 @@ function App() {
   }
 
   useEffect(() => {
-    fetch('https://api.giphy.com/v1/gifs/search?api_key=ndL1whSGZHgorsl8l004DJCwEVZhl21T&q=cat&limit=10', {mode: 'cors'})
+    fetch('https://api.giphy.com/v1/gifs/search?api_key=ndL1whSGZHgorsl8l004DJCwEVZhl21T&q=cat&limit=15', {mode: 'cors'})
       .then((response) => {
         return response.json();
       })
@@ -57,7 +59,8 @@ function App() {
 
   return (
     <div id='app'>
-      <h2>Score: {score}</h2>
+      <h1>CAT CARDZ</h1>
+      <h2>Score: {score} Max Score: {maxScore}</h2>
       <div className='cards'>
         {cards.map(card =>
           <img
