@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react';
+import { v4 as uuid } from 'uuid';
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [cards, setCards] = useState([]);
+
+  const initCards = (data) => {
+    const newCards = [];
+    data.forEach(image => newCards.push({
+      url: image.images.original.url,
+      id: uuid(),
+    }));
+    setCards(newCards);
+  }
+
+  useEffect(() => {
+    fetch('https://api.giphy.com/v1/gifs/search?api_key=ndL1whSGZHgorsl8l004DJCwEVZhl21T&q=cat&limit=10', {mode: 'cors'})
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        initCards(response.data);
+      });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className='cards'>
+      {cards.map(card =>
+        <img
+          className='card'
+          src={card.url} 
+          key={card.id} 
+          width='256px' 
+          height='256px'/>)
+      }
+    </div>
+  );
 }
 
 export default App
