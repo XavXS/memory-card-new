@@ -3,6 +3,7 @@ import { v4 as uuid } from 'uuid';
 import './App.css'
 
 function App() {
+  //const [score, setScore] = useState(0);
   const [cards, setCards] = useState([]);
 
   const initCards = (data) => {
@@ -11,6 +12,18 @@ function App() {
       url: image.images.original.url,
       id: uuid(),
     }));
+    setCards(newCards);
+  }
+
+  const shuffleCards = () => {
+    const newCards = [...cards];
+    console.log('hi');
+    for(let i=0; i<cards.length; ++i) {
+      const newIndex = Math.floor(Math.random() * 10);
+      const temp = newCards[newIndex];
+      newCards[newIndex] = newCards[i];
+      newCards[i] = temp;
+    }
     setCards(newCards);
   }
 
@@ -32,7 +45,9 @@ function App() {
           src={card.url} 
           key={card.id} 
           width='256px' 
-          height='256px'/>)
+          height='256px'
+          onClick={shuffleCards}
+        />)
       }
     </div>
   );
