@@ -17,7 +17,6 @@ function App() {
 
   const shuffleCards = () => {
     const newCards = [...cards];
-    console.log('hi');
     for(let i=0; i<cards.length; ++i) {
       const newIndex = Math.floor(Math.random() * 10);
       const temp = newCards[newIndex];
